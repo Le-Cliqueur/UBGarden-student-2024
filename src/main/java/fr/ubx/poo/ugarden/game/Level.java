@@ -29,6 +29,7 @@ public class Level implements Map {
                 Position position = new Position(level, i, j);
                 MapEntity mapEntity = entities.get(i, j);
                 switch (mapEntity) {
+                    // Add cases to different entity
                     case Grass:
                         decors.put(position, new Grass(position));
                         break;

@@ -44,13 +44,20 @@ public class GameLauncher {
     public Game load() {
         Properties emptyConfig = new Properties();
         MapLevel mapLevel = new MapLevelDefaultStart();
+        System.out.println("1");
         Position gardenerPosition = mapLevel.getGardenerPosition();
+        System.out.println("2");
         if (gardenerPosition == null)
             throw new RuntimeException("Gardener not found");
+        System.out.println("3");
         Configuration configuration = getConfiguration(emptyConfig);
+        System.out.println("4");
         World world = new World(1);
+        System.out.println("5");
         Game game = new Game(world, configuration, gardenerPosition);
+        System.out.println("6");
         Map level = new Level(game, 1, mapLevel);
+        System.out.println("7");
         world.put(1, level);
         return game;
     }
