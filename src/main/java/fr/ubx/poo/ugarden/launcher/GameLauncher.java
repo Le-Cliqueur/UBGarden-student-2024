@@ -43,7 +43,7 @@ public class GameLauncher {
 
     public Game load() {
         Properties emptyConfig = new Properties();
-        MapLevel mapLevel = new MapLevelDefaultStart();
+        MapLevel mapLevel = new MapLevelDefault();
         System.out.println("1");
         Position gardenerPosition = mapLevel.getGardenerPosition();
         System.out.println("2");
@@ -59,6 +59,7 @@ public class GameLauncher {
         Map level = new Level(game, 1, mapLevel);
         System.out.println("7");
         world.put(1, level);
+        System.out.println("8");
         return game;
     }
 

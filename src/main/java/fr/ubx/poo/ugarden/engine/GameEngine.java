@@ -7,10 +7,7 @@
     import fr.ubx.poo.ugarden.game.Direction;
     import fr.ubx.poo.ugarden.game.Game;
     import fr.ubx.poo.ugarden.go.personage.Gardener;
-    import fr.ubx.poo.ugarden.view.ImageResource;
-    import fr.ubx.poo.ugarden.view.Sprite;
-    import fr.ubx.poo.ugarden.view.SpriteFactory;
-    import fr.ubx.poo.ugarden.view.SpriteGardener;
+    import fr.ubx.poo.ugarden.view.*;
     import javafx.animation.AnimationTimer;
     import javafx.application.Platform;
     import javafx.scene.Group;
