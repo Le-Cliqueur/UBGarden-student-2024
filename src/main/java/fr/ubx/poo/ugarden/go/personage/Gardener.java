@@ -13,6 +13,7 @@ import fr.ubx.poo.ugarden.go.TakeVisitor;
 import fr.ubx.poo.ugarden.go.WalkVisitor;
 import fr.ubx.poo.ugarden.go.bonus.Key;
 import fr.ubx.poo.ugarden.go.decor.Decor;
+import fr.ubx.poo.ugarden.go.decor.Flowers;
 
 public class Gardener extends GameObject implements Movable, TakeVisitor, WalkVisitor {
 
@@ -51,7 +52,17 @@ public class Gardener extends GameObject implements Movable, TakeVisitor, WalkVi
     @Override
     public final boolean canMove(Direction direction) {
         // TO UPDATE
-        return true;
+
+        int mapWidth = this.game.world().getGrid().width() - 1;
+        int mapHeight = this.game.world().getGrid().height() - 1;
+        int newX = direction.nextPosition(this.getPosition()).x();
+        int newY = direction.nextPosition(this.getPosition()).y();
+
+        if (newX < 0 || newX > mapWidth || newY < 0 || newY > mapHeight || !(this.game.world().getGrid().get(direction.nextPosition(this.getPosition())).walkableBy(this))) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Override
