@@ -4,6 +4,7 @@
 
 package fr.ubx.poo.ugarden.go.personage;
 
+import fr.ubx.poo.ugarden.engine.Timer;
 import fr.ubx.poo.ugarden.game.Direction;
 import fr.ubx.poo.ugarden.game.Game;
 import fr.ubx.poo.ugarden.game.Position;
@@ -14,6 +15,7 @@ import fr.ubx.poo.ugarden.go.WalkVisitor;
 import fr.ubx.poo.ugarden.go.bonus.Key;
 import fr.ubx.poo.ugarden.go.decor.Decor;
 import fr.ubx.poo.ugarden.go.decor.Flowers;
+import fr.ubx.poo.ugarden.go.decor.ground.Grass;
 import fr.ubx.poo.ugarden.launcher.MapEntity;
 import fr.ubx.poo.ugarden.launcher.MapEntity.*;
 
@@ -22,19 +24,32 @@ public class Gardener extends GameObject implements Movable, TakeVisitor, WalkVi
     private int energy;
     private Direction direction;
     private boolean moveRequested = false;
+    private int nbKey;
+    private int diseaseLevel;
 
     public Gardener(Game game, Position position) {
 
         super(game, position);
         this.direction = Direction.DOWN;
         this.energy = game.configuration().gardenerEnergy();
+        this.nbKey = 0;
+        this.diseaseLevel = 1;
     }
 
     @Override
     public void take(Key key) {
 // TODO
+        this.nbKey++;
+        key.remove();
         System.out.println("I am taking the key, I should do something ...");
+    }
 
+    public int getNbKey() {
+        return this.nbKey;
+    }
+
+    public int getNbDisease() {
+        return this.diseaseLevel;
     }
 
 
@@ -83,10 +98,10 @@ public class Gardener extends GameObject implements Movable, TakeVisitor, WalkVi
         if (moveRequested) {
             if (canMove(direction)) {
                 doMove(direction);
+                this.diseaseLevel = this.game.world().getGrid().get(this.getPosition()).energyConsumptionWalk();
+                this.hurt(this.game.world().getGrid().get(this.getPosition()).energyConsumptionWalk());
                 if (this.game.world().getGrid().get(getPosition()).getClass().equals(Hornet.class)) {
-                    System.out.println(this.getEnergy());
                     this.hurt();
-                    System.out.println(this.getEnergy());
                 }
             }
         }
@@ -98,7 +113,7 @@ public class Gardener extends GameObject implements Movable, TakeVisitor, WalkVi
     }
 
     public void hurt() {
-        hurt(50);
+        hurt(20);
     }
 
     public Direction getDirection() {

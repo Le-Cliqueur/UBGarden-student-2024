@@ -6,6 +6,10 @@ public class Land extends Ground {
     public Land(Position position) {
         super(position);
     }
+
+    public int energyConsumptionWalk() {
+        return 2;
+    }
 }
 
 

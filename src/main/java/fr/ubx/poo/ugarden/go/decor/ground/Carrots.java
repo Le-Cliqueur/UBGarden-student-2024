@@ -8,7 +8,8 @@ public class Carrots extends Ground{
         super(position);
     }
 
-    public boolean walkableBy(Gardener gardener) {
-        return gardener.canWalkOn(this);
+    public int energyConsumptionWalk() {
+        return 3;
     }
+
 }

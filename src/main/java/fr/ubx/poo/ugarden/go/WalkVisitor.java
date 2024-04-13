@@ -1,6 +1,7 @@
 package fr.ubx.poo.ugarden.go;
 
 import fr.ubx.poo.ugarden.go.decor.Decor;
+import fr.ubx.poo.ugarden.go.decor.Flowers;
 import fr.ubx.poo.ugarden.go.decor.Tree;
 import fr.ubx.poo.ugarden.go.decor.ground.Carrots;
 
@@ -13,7 +14,7 @@ public interface WalkVisitor {
         return false;
     }
 
-    default boolean canWalkOn(Carrots carrots) {
+    default boolean canWalkOn(Flowers flowers) {
         return false;
     }
 
