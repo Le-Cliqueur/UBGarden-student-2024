@@ -7,6 +7,8 @@
     import fr.ubx.poo.ugarden.game.Direction;
     import fr.ubx.poo.ugarden.game.Game;
     import fr.ubx.poo.ugarden.go.personage.Gardener;
+    import fr.ubx.poo.ugarden.go.personage.Hedgehog;
+    import fr.ubx.poo.ugarden.launcher.MapEntity;
     import fr.ubx.poo.ugarden.view.*;
     import javafx.animation.AnimationTimer;
     import javafx.application.Platform;
@@ -159,6 +161,10 @@
             if (gardener.getEnergy() < 0) {
                 gameLoop.stop();
                 showMessage("Perdu!", Color.RED);
+            }
+            if (gardener.game.world().getGrid().get(gardener.getPosition()).getClass().equals(Hedgehog.class)) {
+                gameLoop.stop();
+                showMessage("Victoire!", Color.GREEN);
             }
         }
 

@@ -14,10 +14,12 @@ import fr.ubx.poo.ugarden.go.WalkVisitor;
 import fr.ubx.poo.ugarden.go.bonus.Key;
 import fr.ubx.poo.ugarden.go.decor.Decor;
 import fr.ubx.poo.ugarden.go.decor.Flowers;
+import fr.ubx.poo.ugarden.launcher.MapEntity;
+import fr.ubx.poo.ugarden.launcher.MapEntity.*;
 
 public class Gardener extends GameObject implements Movable, TakeVisitor, WalkVisitor {
 
-    private final int energy;
+    private int energy;
     private Direction direction;
     private boolean moveRequested = false;
 
@@ -34,6 +36,7 @@ public class Gardener extends GameObject implements Movable, TakeVisitor, WalkVi
         System.out.println("I am taking the key, I should do something ...");
 
     }
+
 
 
     public int getEnergy() {
@@ -75,20 +78,27 @@ public class Gardener extends GameObject implements Movable, TakeVisitor, WalkVi
             next.takenBy(this);
     }
 
+
     public void update(long now) {
         if (moveRequested) {
             if (canMove(direction)) {
                 doMove(direction);
+                if (this.game.world().getGrid().get(getPosition()).getClass().equals(Hornet.class)) {
+                    System.out.println(this.getEnergy());
+                    this.hurt();
+                    System.out.println(this.getEnergy());
+                }
             }
         }
         moveRequested = false;
     }
 
     public void hurt(int damage) {
+        this.energy -= damage;
     }
 
     public void hurt() {
-        hurt(1);
+        hurt(50);
     }
 
     public Direction getDirection() {

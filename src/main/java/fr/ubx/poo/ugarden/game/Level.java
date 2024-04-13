@@ -9,6 +9,7 @@ import fr.ubx.poo.ugarden.go.decor.ground.Carrots;
 import fr.ubx.poo.ugarden.go.decor.ground.Grass;
 import fr.ubx.poo.ugarden.go.decor.ground.Land;
 import fr.ubx.poo.ugarden.go.personage.Hedgehog;
+import fr.ubx.poo.ugarden.go.personage.Hornet;
 import fr.ubx.poo.ugarden.launcher.MapEntity;
 import fr.ubx.poo.ugarden.launcher.MapLevel;
 
@@ -84,6 +85,10 @@ public class Level implements Map {
                         Decor grass = new Grass(position);
                         grass.setBonus(new Nest(position, grass));
                         decors.put(position, grass);
+                        break;
+                    }
+                    case Hornet: {
+                        decors.put(position, new Hornet(position));
                         break;
                     }
 

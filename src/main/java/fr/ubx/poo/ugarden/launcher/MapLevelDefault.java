@@ -11,7 +11,7 @@ public class MapLevelDefault extends MapLevel {
             {Grass, Gardener, Grass, Grass, Grass, Land, Land, Land, Apple, Tree, Grass, Grass, Tree, Tree, Apple, Carrots, Grass, Grass},
             {Grass, Grass, Grass, Grass, Grass, Land, Land, Land, Flowers, Flowers, Flowers, Grass, Grass, Tree, Carrots, Carrots, Carrots, Carrots},
             {Grass, Grass, Grass, Grass, Grass, Land, Land, Land, Carrots, Nest, Carrots, Carrots, Grass, Tree, Flowers, Carrots, Carrots, Flowers},
-            {PoisonedApple, Tree, Grass, Tree, Grass, Grass, Flowers, Flowers, Carrots, Carrots, Carrots, Carrots, Grass, Tree, Flowers, Carrots, Grass, Flowers},
+            {PoisonedApple, Tree, Grass, Tree, Grass, Grass, Flowers, Flowers, Carrots, Carrots, Carrots, Carrots, Grass, Tree, Flowers, Carrots, Hornet, Flowers},
             {Grass, Tree, Tree, Tree, PoisonedApple, Flowers, Grass, Grass, Carrots, Carrots, Carrots, Carrots, Grass, Grass, Flowers, Flowers, Flowers, Flowers},
             {Grass, Grass, Grass, PoisonedApple, Grass, Grass, Grass, Grass, Carrots, Carrots, Carrots, Carrots, Grass, Grass, Grass, Grass, Hedgehog, Grass},
             {Grass, Tree, Grass, Tree, Grass, Grass, Grass, Grass, Grass, Grass, Grass, Grass, Grass, Grass, Grass, Grass, Grass, Grass}

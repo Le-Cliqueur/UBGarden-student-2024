@@ -14,6 +14,7 @@ import fr.ubx.poo.ugarden.go.decor.ground.Carrots;
 import fr.ubx.poo.ugarden.go.decor.ground.Grass;
 import fr.ubx.poo.ugarden.go.decor.ground.Land;
 import fr.ubx.poo.ugarden.go.personage.Hedgehog;
+import fr.ubx.poo.ugarden.go.personage.Hornet;
 import javafx.scene.layout.Pane;
 
 import static fr.ubx.poo.ugarden.view.ImageResource.*;
@@ -49,6 +50,8 @@ public final class SpriteFactory {
             return new Sprite(layer, factory.get(DOOR_CLOSED), gameObject);
         if (gameObject instanceof Nest)
             return new Sprite(layer, factory.get(NEST), gameObject);
+        if (gameObject instanceof Hornet)
+            return new Sprite(layer, factory.get(HORNET_LEFT), gameObject);
         throw new RuntimeException("Unsupported sprite for decor " + gameObject);
     }
 }
