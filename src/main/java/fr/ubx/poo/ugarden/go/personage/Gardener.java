@@ -42,6 +42,7 @@ public class Gardener extends GameObject implements Movable, TakeVisitor, WalkVi
         this.nbKey++;
         key.remove();
         System.out.println("I am taking the key, I should do something ...");
+
     }
 
     public int getNbKey() {
@@ -86,11 +87,14 @@ public class Gardener extends GameObject implements Movable, TakeVisitor, WalkVi
     @Override
     public void doMove(Direction direction) {
         // Restart the timer
+        this.game.getTimer().stop();
+        this.game.getTimer().start();
         Position nextPos = direction.nextPosition(getPosition());
         Decor next = game.world().getGrid().get(nextPos);
         setPosition(nextPos);
-        if (next != null)
+        if (next != null) {
             next.takenBy(this);
+        }
     }
 
 

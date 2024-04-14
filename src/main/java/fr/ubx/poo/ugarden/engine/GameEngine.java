@@ -158,6 +158,15 @@
 
             gardener.update(now);
 
+            this.game.getTimer().update(now);
+            if (this.game.getTimer().getRemaining() <= 0 && gardener.getEnergy() < 100) {
+                gardener.hurt(-1);
+                this.game.getTimer().stop();
+                this.game.getTimer().start();
+            }
+
+            System.out.println(this.game.getTimer().getRemaining());
+
             if (gardener.getEnergy() <= 0) {
                 gameLoop.stop();
                 showMessage("Perdu!", Color.RED);
