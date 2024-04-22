@@ -77,7 +77,7 @@ public class Gardener extends GameObject implements Movable, TakeVisitor, WalkVi
         int newX = direction.nextPosition(this.getPosition()).x();
         int newY = direction.nextPosition(this.getPosition()).y();
 
-        if (newX < 0 || newX > mapWidth || newY < 0 || newY > mapHeight || !(this.game.world().getGrid().get(direction.nextPosition(this.getPosition())).walkableBy(this))) {
+        if (newX < 0 || newX > mapWidth || newY < 0 || newY > mapHeight ) {
             return false;
         } else {
             return true;

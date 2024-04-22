@@ -46,6 +46,7 @@ public class GameLauncher {
         MapLevel mapLevel = new MapLevelDefault();
         System.out.println("1");
         Position gardenerPosition = mapLevel.getGardenerPosition();
+        Position nestPosition = mapLevel.getNestPosition();
         System.out.println("2");
         if (gardenerPosition == null)
             throw new RuntimeException("Gardener not found");
@@ -54,7 +55,7 @@ public class GameLauncher {
         System.out.println("4");
         World world = new World(1);
         System.out.println("5");
-        Game game = new Game(world, configuration, gardenerPosition);
+        Game game = new Game(world, configuration, gardenerPosition, nestPosition);
         System.out.println("6");
         Map level = new Level(game, 1, mapLevel);
         System.out.println("7");

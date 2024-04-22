@@ -35,6 +35,7 @@
         private static AnimationTimer gameLoop;
         private final Game game;
         private final Gardener gardener;
+        private final Hornet[] hornets;
         private final List<Sprite> sprites = new LinkedList<>();
         private final Set<Sprite> cleanUpSprites = new HashSet<>();
         private final Stage stage;
@@ -46,6 +47,7 @@
             this.stage = stage;
             this.game = game;
             this.gardener = game.getGardener();
+            this.hornets = game.getHornets();
             initialize();
             buildAndSetGameLoop();
         }
@@ -82,7 +84,8 @@
                     bonus.setModified(true);
                 }
             }
-            sprites.add(new SpriteHornet(layer, new Hornet(game, new Position(1,16, 4))));
+            game.addHornet();
+            hornets[0].hornetMove();
             sprites.add(new SpriteGardener(layer, gardener));
         }
 
@@ -179,16 +182,34 @@
                 showMessage("Victoire!", Color.GREEN);
             }
 
-            if (gardener.getEnergy() < 75) {
-                sprites.add(new SpriteHornet(layer, new Hornet(game, new Position(1, 2, 3))));
 
+            for (int i = 0; i < game.getIndex(); i++) {
+                sprites.add(new SpriteHornet(layer, hornets[i]));
+            }
+
+
+            game.getHornetTimer().update(now);
+
+
+
+
+            if (this.game.getHornetTimer().getRemaining() <= 0) {
+                this.game.addHornet();
+            }
+
+            game.getTimerBis().update(now);
+
+
+            if (game.getTimerBis().getRemaining() <= 0) {
+                for (int i = 0; i < game.getIndex(); i++) {
+                    hornets[i].hornetMove();
+                    hornets[i].setModified(true);
+                    hornets[i].update(now);
+                }
             }
 
             // dans gae faire un tableau de hornet avec un get hornets[] + faire boucle de sprite.add dans update
 
-            if (gardener.getEnergy() < 30) {
-                sprites.get(sprites.size()-1).getGameObject().setPosition(new Position(1,1,1));
-            }
 
 
         }
