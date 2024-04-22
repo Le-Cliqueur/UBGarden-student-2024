@@ -2,8 +2,7 @@ package fr.ubx.poo.ugarden.launcher;
 
 import fr.ubx.poo.ugarden.game.Position;
 
-import static fr.ubx.poo.ugarden.launcher.MapEntity.Gardener;
-import static fr.ubx.poo.ugarden.launcher.MapEntity.Grass;
+import static fr.ubx.poo.ugarden.launcher.MapEntity.*;
 
 public class MapLevel {
 
@@ -13,6 +12,7 @@ public class MapLevel {
 
 
     private Position gardenerPosition = null;
+    private Position hornetPosition = null;
 
     public MapLevel(int width, int height) {
         this.width = width;

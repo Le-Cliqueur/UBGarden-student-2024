@@ -87,10 +87,7 @@ public class Level implements Map {
                         decors.put(position, grass);
                         break;
                     }
-                    case Hornet: {
-                        decors.put(position, new Hornet(position));
-                        break;
-                    }
+
 
                     default:
                         throw new RuntimeException("EntityCode " + mapEntity.name() + " not processed");

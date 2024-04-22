@@ -9,6 +9,7 @@
     import fr.ubx.poo.ugarden.game.Position;
     import fr.ubx.poo.ugarden.go.GameObject;
     import fr.ubx.poo.ugarden.go.decor.Decor;
+    import fr.ubx.poo.ugarden.go.decor.ground.Carrots;
     import fr.ubx.poo.ugarden.go.personage.Gardener;
     import fr.ubx.poo.ugarden.go.personage.Hedgehog;
     import fr.ubx.poo.ugarden.go.personage.Hornet;
@@ -71,11 +72,8 @@
 
             // Create sprites
             int currentLevel = game.world().currentLevel();
-            /*
+
             for (var decor : game.world().getGrid().values()) {
-                if (decor.getClass().equals(Hornet.class)) {
-                    sprites.add(new SpriteHornet(layer, ));
-                }
                 sprites.add(SpriteFactory.create(layer, decor));
                 decor.setModified(true);
                 var bonus = decor.getBonus();
@@ -84,24 +82,7 @@
                     bonus.setModified(true);
                 }
             }
-            */
-
-            for (int i = 0; i < game.world().getGrid().width(); i++) {
-                for (int j = 0; j < game.world().getGrid().height(); j++) {
-                    Decor decor = game.world().getGrid().get(new Position(1, i, j));
-                    if (decor.getClass().equals(Hornet.class)) {
-                        sprites.add(new SpriteHornet(layer, decor));
-                    } else {
-                        sprites.add(SpriteFactory.create(layer, decor));
-                        decor.setModified(true);
-                        var bonus = decor.getBonus();
-                        if (bonus != null) {
-                            sprites.add(SpriteFactory.create(layer, bonus));
-                            bonus.setModified(true);
-                        }
-                    }
-                }
-            }
+            sprites.add(new SpriteHornet(layer, new Hornet(game, new Position(1,16, 4))));
             sprites.add(new SpriteGardener(layer, gardener));
         }
 
@@ -198,17 +179,18 @@
                 showMessage("Victoire!", Color.GREEN);
             }
 
-            for (int i = 0; i < game.world().getGrid().width(); i++) {
-                for (int j = 0; j < game.world().getGrid().height(); j++) {
-                    Decor decor = game.world().getGrid().get(new Position(1, i, j));
-                    if (decor.getClass().equals(Hornet.class)) {
-                        ((Hornet) decor).changeDirection();
-                        decor.update(now);
-                        decor.setModified(true);
-                        System.out.println("position:"+decor.getPosition()+"number:"+((Hornet) decor).rdm());
-                    }
-                }
+            if (gardener.getEnergy() < 75) {
+                sprites.add(new SpriteHornet(layer, new Hornet(game, new Position(1, 2, 3))));
+
             }
+
+            // dans gae faire un tableau de hornet avec un get hornets[] + faire boucle de sprite.add dans update
+
+            if (gardener.getEnergy() < 30) {
+                sprites.get(sprites.size()-1).getGameObject().setPosition(new Position(1,1,1));
+            }
+
+
         }
 
         public void cleanupSprites() {

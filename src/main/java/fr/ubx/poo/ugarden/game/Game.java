@@ -3,6 +3,7 @@ package fr.ubx.poo.ugarden.game;
 import fr.ubx.poo.ugarden.engine.Input;
 import fr.ubx.poo.ugarden.engine.Timer;
 import fr.ubx.poo.ugarden.go.personage.Gardener;
+import fr.ubx.poo.ugarden.go.personage.Hornet;
 
 
 public class Game {
@@ -20,7 +21,6 @@ public class Game {
         gardener = new Gardener(this, gardenerPosition);
         this.timer = new Timer(1);
     }
-
     public Configuration configuration() {
         return configuration;
     }
@@ -32,6 +32,7 @@ public class Game {
     public Gardener getGardener() {
         return this.gardener;
     }
+
 
     public World world() {
         return world;

@@ -5,7 +5,6 @@
 package fr.ubx.poo.ugarden.view;
 
 import fr.ubx.poo.ugarden.game.Direction;
-import fr.ubx.poo.ugarden.go.decor.Decor;
 import fr.ubx.poo.ugarden.go.personage.Hornet;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
@@ -15,7 +14,7 @@ public class SpriteHornet extends Sprite {
 
     private final ColorAdjust effect = new ColorAdjust();
 
-    public SpriteHornet(Pane layer, Decor hornet) {
+    public SpriteHornet(Pane layer, Hornet hornet) {
         super(layer, null, hornet);
         // effect.setBrightness(0.5);
         updateImage();
