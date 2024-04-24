@@ -28,6 +28,8 @@
     import javafx.scene.text.TextAlignment;
     import javafx.stage.Stage;
 
+    import fr.ubx.poo.ugarden.view.ImageResource.*;
+
     import java.awt.*;
     import java.util.*;
     import java.util.List;
@@ -38,7 +40,6 @@
         private static AnimationTimer gameLoop;
         private final Game game;
         private final Gardener gardener;
-        private final Hornet[] hornets;
         private final List<Sprite> sprites = new LinkedList<>();
         private final Set<Sprite> cleanUpSprites = new HashSet<>();
         private final Stage stage;
@@ -50,7 +51,6 @@
             this.stage = stage;
             this.game = game;
             this.gardener = game.getGardener();
-            this.hornets = game.getHornets();
             initialize();
             buildAndSetGameLoop();
         }
@@ -91,7 +91,7 @@
             sprites.add(new SpriteGardener(layer, gardener));
 
 
-            sprites.add(new SpriteHornet(layer, new Hornet(game, game.getNestPosition())));
+            sprites.add(new SpriteHornet(layer, new Hornet(game, game.getNestPosition(), Direction.UP)));
 
             game.getHornetTimer().stop();
             game.getHornetTimer().start();
@@ -214,7 +214,7 @@
 
 
             if (this.game.getHornetTimer().getRemaining() <= 0) {
-                sprites.add(new SpriteHornet(layer, new Hornet(game, game.getNestPosition())));
+                sprites.add(new SpriteHornet(layer, new Hornet(game, game.getNestPosition(), Direction.UP)));
                 game.getHornetTimer().stop();
                 game.getHornetTimer().start();
             }
@@ -226,13 +226,23 @@
 
 
             if (game.getTimerBis().getRemaining() <= 0) {
-                System.out.println("voila");
                 for (int i = 0; i < sprites.size(); i++) {
                     if (sprites.get(i).getClass().equals(SpriteHornet.class)) {
                         Position hornetPosition = sprites.get(i).getPosition();
-                        sprites.get(i).getGameObject().setPosition(Direction.random().nextPosition(hornetPosition));
-                        System.out.println(sprites.get(i).getPosition());
+
+                        Direction direction;
+                        Hornet hornet;
+                        do {
+                            direction = Direction.random();
+                            hornet = new Hornet(game, hornetPosition, direction);
+                        } while (!hornet.canMove(direction));
+
+                        hornet = new Hornet(game, direction.nextPosition(hornetPosition), direction);
+
+                        sprites.get(i).remove();
+                        sprites.set(i, new SpriteHornet(layer, hornet));
                     }
+
                 }
                 game.getTimerBis().stop();
                 game.getTimerBis().start();

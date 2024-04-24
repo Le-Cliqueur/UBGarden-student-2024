@@ -11,8 +11,6 @@ public class Game {
     private final Configuration configuration;
     private final World world;
     private final Gardener gardener;
-    int index;
-    private Hornet[] hornets;
     private boolean switchLevelRequested = false;
     private int switchLevel;
     private Position nestPosition;
@@ -25,8 +23,6 @@ public class Game {
         this.world = world;
         gardener = new Gardener(this, gardenerPosition);
         this.nestPosition = nestPosition;
-        index = 0;
-        hornets = new Hornet[100];
         this.timer = new Timer(1);
         this.timerBis = new Timer(1);
         this.hornetTimer = new Timer(10);
@@ -53,35 +49,6 @@ public class Game {
 
     public Position getNestPosition() {
         return this.nestPosition;
-    }
-
-    public Hornet[] getHornets() {
-        return this.hornets;
-    }
-    public int getIndex() {
-        return this.index;
-    }
-
-    public void addHornet() {
-        this.hornets[index] = new Hornet(this, nestPosition);
-        index++;
-        hornetTimer.stop();
-        hornetTimer.start();
-    }
-
-    public void deleteHornet(int idx) {
-        Hornet[] nh = new Hornet[100];
-
-        for (int i = 0; i < index; i++) {
-            if (i < idx) {
-                nh[i] = hornets[i];
-            } else {
-                nh[i] = hornets[i+1];
-            }
-        }
-
-        this.index--;
-        this.hornets = nh;
     }
 
 

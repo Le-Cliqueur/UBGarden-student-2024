@@ -23,10 +23,10 @@ public class Hornet extends GameObject {
     private Direction direction;
 
 
-    public Hornet(Game game, Position position) {
+    public Hornet(Game game, Position position, Direction direction) {
 
         super(game, position);
-        this.direction = Direction.UP;
+        this.direction = direction;
 
     }
 
@@ -38,7 +38,7 @@ public class Hornet extends GameObject {
         int newX = direction.nextPosition(this.getPosition()).x();
         int newY = direction.nextPosition(this.getPosition()).y();
 
-        if (newX < 0 || newX > mapWidth || newY < 0 || newY > mapHeight) {
+        if (newX < 0 || newX > mapWidth || newY < 0 || newY > mapHeight || game.world().getGrid().get(direction.nextPosition(getPosition())).getClass().equals(Tree.class)) {
             return false;
         } else {
             return true;
