@@ -104,9 +104,6 @@ public class Gardener extends GameObject implements Movable, TakeVisitor, WalkVi
                 doMove(direction);
                 this.diseaseLevel = this.game.world().getGrid().get(this.getPosition()).energyConsumptionWalk();
                 this.hurt(this.game.world().getGrid().get(this.getPosition()).energyConsumptionWalk());
-                if (this.game.world().getGrid().get(getPosition()).getClass().equals(Hornet.class)) {
-                    this.hurt();
-                }
             }
         }
         moveRequested = false;

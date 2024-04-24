@@ -51,6 +51,10 @@ public class Game {
         return this.gardener;
     }
 
+    public Position getNestPosition() {
+        return this.nestPosition;
+    }
+
     public Hornet[] getHornets() {
         return this.hornets;
     }
@@ -63,6 +67,21 @@ public class Game {
         index++;
         hornetTimer.stop();
         hornetTimer.start();
+    }
+
+    public void deleteHornet(int idx) {
+        Hornet[] nh = new Hornet[100];
+
+        for (int i = 0; i < index; i++) {
+            if (i < idx) {
+                nh[i] = hornets[i];
+            } else {
+                nh[i] = hornets[i+1];
+            }
+        }
+
+        this.index--;
+        this.hornets = nh;
     }
 
 

@@ -45,22 +45,6 @@ public class Hornet extends GameObject {
         }
     }
 
-    public void hornetMove() {
-        game.getTimerBis().stop();
-        game.getTimerBis().start();
-
-        Direction newDirection = Direction.random();
-
-        while (!canMove(newDirection) || game.world().getGrid().get(newDirection.nextPosition(getPosition())).getClass().equals(Tree.class) ) {
-            newDirection = Direction.random();
-        }
-
-        this.direction = newDirection;
-        Position nextPos = newDirection.nextPosition(getPosition());
-        setPosition(nextPos);
-
-    }
-
 
     public Direction getDirection() {
         return direction;

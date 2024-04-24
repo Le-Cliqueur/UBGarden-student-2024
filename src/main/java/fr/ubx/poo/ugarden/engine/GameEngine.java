@@ -19,6 +19,7 @@
     import javafx.application.Platform;
     import javafx.scene.Group;
     import javafx.scene.Scene;
+    import javafx.scene.image.Image;
     import javafx.scene.layout.Pane;
     import javafx.scene.layout.StackPane;
     import javafx.scene.paint.Color;
@@ -27,7 +28,9 @@
     import javafx.scene.text.TextAlignment;
     import javafx.stage.Stage;
 
+    import java.awt.*;
     import java.util.*;
+    import java.util.List;
 
 
     public final class GameEngine {
@@ -84,9 +87,17 @@
                     bonus.setModified(true);
                 }
             }
-            game.addHornet();
-            hornets[0].hornetMove();
+
             sprites.add(new SpriteGardener(layer, gardener));
+
+
+            sprites.add(new SpriteHornet(layer, new Hornet(game, game.getNestPosition())));
+
+            game.getHornetTimer().stop();
+            game.getHornetTimer().start();
+
+            game.getTimerBis().stop();
+            game.getTimerBis().start();
         }
 
         void buildAndSetGameLoop() {
@@ -124,6 +135,16 @@
 
         private void checkCollision() {
             // Check a collision between a hornet and the gardener
+            for (int i = 0; i < sprites.size(); i++) {
+                if (sprites.get(i).getClass().equals(SpriteHornet.class) && sprites.get(i).getGameObject().getPosition().equals(gardener.getPosition())) {
+
+                    sprites.get(i).remove();
+                    sprites.remove(i);
+
+                    gardener.hurt();
+                }
+
+            }
         }
 
         private void processInput() {
@@ -183,9 +204,7 @@
             }
 
 
-            for (int i = 0; i < game.getIndex(); i++) {
-                sprites.add(new SpriteHornet(layer, hornets[i]));
-            }
+
 
 
             game.getHornetTimer().update(now);
@@ -193,22 +212,32 @@
 
 
 
+
             if (this.game.getHornetTimer().getRemaining() <= 0) {
-                this.game.addHornet();
+                sprites.add(new SpriteHornet(layer, new Hornet(game, game.getNestPosition())));
+                game.getHornetTimer().stop();
+                game.getHornetTimer().start();
             }
+
 
             game.getTimerBis().update(now);
 
 
+
+
             if (game.getTimerBis().getRemaining() <= 0) {
-                for (int i = 0; i < game.getIndex(); i++) {
-                    hornets[i].hornetMove();
-                    hornets[i].setModified(true);
-                    hornets[i].update(now);
+                System.out.println("voila");
+                for (int i = 0; i < sprites.size(); i++) {
+                    if (sprites.get(i).getClass().equals(SpriteHornet.class)) {
+                        Position hornetPosition = sprites.get(i).getPosition();
+                        sprites.get(i).getGameObject().setPosition(Direction.random().nextPosition(hornetPosition));
+                        System.out.println(sprites.get(i).getPosition());
+                    }
                 }
+                game.getTimerBis().stop();
+                game.getTimerBis().start();
             }
 
-            // dans gae faire un tableau de hornet avec un get hornets[] + faire boucle de sprite.add dans update
 
 
 
