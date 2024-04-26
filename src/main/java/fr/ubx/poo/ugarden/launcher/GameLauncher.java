@@ -13,6 +13,11 @@ public class GameLauncher {
     private GameLauncher() {
     }
 
+    public GameLauncher (int levels, MapLevel[] mapLevels) {
+        this.levels = levels;
+        this.mapLevels = mapLevels;
+    }
+
     public static GameLauncher getInstance() {
         return LoadSingleton.INSTANCE;
     }
