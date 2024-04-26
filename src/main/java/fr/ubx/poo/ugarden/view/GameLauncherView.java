@@ -59,60 +59,10 @@ public class GameLauncherView extends BorderPane {
                 // TODO
                 System.err.println("[TODO] Not implemented");
 
-                Properties properties = new Properties();
-                FileInputStream in = null;
-                try {
-                    in = new FileInputStream(file);
-                    properties.load(in);
-                    MapLevel[] levelTab = new MapLevel[Integer.parseInt(properties.getProperty("levels"))];
+                Game game = GameLauncher.getInstance().load(file);
+                GameEngine engine = new GameEngine(game, stage);
+                engine.start();
 
-                    for (int i = 1; i <= Integer.parseInt(properties.getProperty("levels")); i++) {
-                        String levelEntityCode = properties.getProperty("level" + i);
-
-                        System.out.println("level" + i);
-
-                        int width = 0;
-                        int height = 0;
-
-                        for (int j = 0; j < levelEntityCode.length()-1; j++) {
-                            if (levelEntityCode.charAt(j) != 'x') {
-                                height++;
-                            } else {
-                                width++;
-                                height = 0;
-                            }
-                        }
-
-                        MapLevel mapLevel = new MapLevel(width+1, height);
-
-                        int onTheLine = 0;
-                        int onTheCol = 0;
-
-                        for (int j = 0; j < levelEntityCode.length(); j++) {
-                            if (levelEntityCode.charAt(j) != 'x') {
-                                mapLevel.set(onTheLine, onTheCol, MapEntity.fromCode(levelEntityCode.charAt(j)));
-                                onTheCol++;
-
-                            } else {
-                                onTheLine++;
-                                onTheCol = 0;
-                            }
-                        }
-
-                        levelTab[i-1] = mapLevel;
-
-                    }
-
-                    GameLauncher gm = new GameLauncher(1, levelTab);
-                    Game game = gm.load();
-                    GameEngine engine = new GameEngine(game, stage);
-                    engine.start();
-                    
-                } catch (FileNotFoundException ex) {
-                    throw new RuntimeException(ex);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
             }
         });
 

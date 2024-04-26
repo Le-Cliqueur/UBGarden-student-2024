@@ -3,6 +3,9 @@ package fr.ubx.poo.ugarden.launcher;
 import fr.ubx.poo.ugarden.game.*;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Properties;
 
 public class GameLauncher {
@@ -43,7 +46,69 @@ public class GameLauncher {
     }
 
     public Game load(File file) {
-        return null;
+        Properties properties = new Properties();
+        FileInputStream in = null;
+
+        try {
+            in = new FileInputStream(file);
+            properties.load(in);
+
+            String levelEntityCode = properties.getProperty("level1");
+
+            int width = 0;
+            int height = 0;
+
+            for (int j = 0; j < levelEntityCode.length()-1; j++) {
+                if (levelEntityCode.charAt(j) != 'x') {
+                    height++;
+                } else {
+                    width++;
+                    height = 0;
+                }
+            }
+
+            MapLevel mapLevel = new MapLevel(width+1, height);
+            System.out.println(width + "   " + height);
+
+            int onTheLine = 0;
+            int onTheCol = 0;
+
+            for (int j = 0; j < levelEntityCode.length(); j++) {
+                if (levelEntityCode.charAt(j) != 'x') {
+                    mapLevel.set(onTheLine, onTheCol, MapEntity.fromCode(levelEntityCode.charAt(j)));
+                    onTheCol++;
+
+                } else {
+                    onTheLine++;
+                    onTheCol = 0;
+                }
+            }
+
+            System.out.println("11");
+            Position gardenerPosition = mapLevel.getGardenerPosition();
+            Position nestPosition = mapLevel.getNestPosition();
+            System.out.println("22");
+            if (gardenerPosition == null)
+                throw new RuntimeException("Gardener not found");
+            System.out.println("33");
+            Configuration configuration = getConfiguration(properties);
+            System.out.println("44");
+            World world = new World(Integer.parseInt(properties.getProperty("levels")));
+            System.out.println("55");
+            Game game = new Game(world, configuration, gardenerPosition, nestPosition);
+            System.out.println("66");
+            Map level = new Level(game, 1, mapLevel);
+            System.out.println("77");
+            world.put(1, level);
+            System.out.println("88");
+            return game;
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public Game load() {
