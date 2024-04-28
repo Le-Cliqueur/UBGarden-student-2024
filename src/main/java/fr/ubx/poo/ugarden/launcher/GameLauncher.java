@@ -114,30 +114,27 @@ public class GameLauncher {
                 int onTheLine = 0;
                 int onTheCol = 0;
 
-                for (int j = 0; j < levelEntityCode.length(); j++) {
-                    System.out.println(mapLevel + "char :" +levelEntityCode.charAt(j));
-                    for (int i = 0; i < mapLevel.width(); i++) {
-                        for (int k = 0; k < mapLevel.height(); k++) {
-                            System.out.println(mapLevel.get(i,k));
-                        }
-                    }
-                    if (levelEntityCode.charAt(j) != 'x') {
-                        if (Character.isDigit(levelEntityCode.charAt(j))) {
-                            for (int k = 0; k < (((int) levelEntityCode.charAt(j)) - 48); k++) {
-                                mapLevel.set(onTheLine, onTheCol--, MapEntity.fromCode(levelEntityCode.charAt(j-1)));
-                                onTheCol++;
+                for (int i = 0; i < levelEntityCode.length(); i++) {
+                    if (levelEntityCode.charAt(i) != 'x') {
+                        if (Character.isDigit(levelEntityCode.charAt(i))) {
+                            int val = (int) levelEntityCode.charAt(i) - 48;
+                            for (int j = 0; j < val; j++) {
+                                mapLevel.set(onTheLine, onTheCol-1+j, MapEntity.fromCode(levelEntityCode.charAt(i-1)));
                             }
+                            onTheCol += val - 1;
                         } else {
-                            mapLevel.set(onTheLine, onTheCol, MapEntity.fromCode(levelEntityCode.charAt(j)));
+                            mapLevel.set(onTheLine, onTheCol, MapEntity.fromCode(levelEntityCode.charAt(i)));
                             onTheCol++;
                         }
+
                     } else {
                         onTheLine++;
                         onTheCol = 0;
                     }
-                }
-            }
 
+                }
+
+            }
 
 
 
