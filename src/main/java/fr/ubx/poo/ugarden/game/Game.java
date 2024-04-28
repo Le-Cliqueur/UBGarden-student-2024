@@ -16,6 +16,7 @@ public class Game {
     private Timer timer;
     private Timer timerBis;
     private Timer hornetTimer;
+    private boolean doorOpen;
 
     public Game(World world, Configuration configuration, Position gardenerPosition) {
         this.configuration = configuration;
@@ -24,6 +25,7 @@ public class Game {
         this.timer = new Timer(configuration.energyRecoverDuration());
         this.timerBis = new Timer(1);
         this.hornetTimer = new Timer(10);
+        this.doorOpen = false;
     }
     public Configuration configuration() {
         return configuration;
@@ -43,6 +45,14 @@ public class Game {
 
     public Gardener getGardener() {
         return this.gardener;
+    }
+
+    public boolean isDoorOpen() {
+        return this.doorOpen;
+    }
+
+    public void setDoorOpen(boolean open) {
+        this.doorOpen = open;
     }
 
 

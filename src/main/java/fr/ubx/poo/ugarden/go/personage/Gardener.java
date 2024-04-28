@@ -16,6 +16,8 @@ import fr.ubx.poo.ugarden.go.bonus.Apple;
 import fr.ubx.poo.ugarden.go.bonus.Key;
 import fr.ubx.poo.ugarden.go.bonus.PoisonedApple;
 import fr.ubx.poo.ugarden.go.decor.Decor;
+import fr.ubx.poo.ugarden.go.decor.DoorNextClosed;
+import fr.ubx.poo.ugarden.go.decor.DoorNextOpened;
 import fr.ubx.poo.ugarden.go.decor.Flowers;
 import fr.ubx.poo.ugarden.go.decor.ground.Grass;
 import fr.ubx.poo.ugarden.launcher.MapEntity;
@@ -28,6 +30,7 @@ public class Gardener extends GameObject implements Movable, TakeVisitor, WalkVi
     private boolean moveRequested = false;
     private int nbKey;
     private int diseaseLevel;
+
 
     public Gardener(Game game, Position position) {
 
@@ -44,6 +47,13 @@ public class Gardener extends GameObject implements Movable, TakeVisitor, WalkVi
         this.nbKey++;
         key.remove();
         System.out.println("I am taking the key, I should do something ...");
+        for (int i = 0; i < game.world().getGrid().width(); i++) {
+            for (int j = 0; j < game.world().getGrid().height(); j++) {
+                if (game.world().getGrid().get(new Position(game.world().currentLevel(), i, j)).getClass().equals(DoorNextClosed.class)) {
+                    game.setDoorOpen(true);
+                }
+            }
+        }
 
     }
 

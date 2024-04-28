@@ -11,6 +11,8 @@
     import fr.ubx.poo.ugarden.go.bonus.Key;
     import fr.ubx.poo.ugarden.go.bonus.Nest;
     import fr.ubx.poo.ugarden.go.decor.Decor;
+    import fr.ubx.poo.ugarden.go.decor.DoorNextClosed;
+    import fr.ubx.poo.ugarden.go.decor.DoorNextOpened;
     import fr.ubx.poo.ugarden.go.decor.ground.Carrots;
     import fr.ubx.poo.ugarden.go.personage.Gardener;
     import fr.ubx.poo.ugarden.go.personage.Hedgehog;
@@ -259,7 +261,15 @@
 
                 game.getTimerBis().stop();
                 game.getTimerBis().start();
+            }
 
+            if (game.isDoorOpen()) {
+                for (int i = 0; i < sprites.size(); i++) {
+                    if (sprites.get(i).getGameObject().getClass().equals(DoorNextClosed.class)) {
+                        Position pos = sprites.get(i).getGameObject().getPosition();
+                        sprites.set(i, SpriteFactory.create(layer, new DoorNextOpened(pos)));
+                    }
+                }
             }
         }
 
