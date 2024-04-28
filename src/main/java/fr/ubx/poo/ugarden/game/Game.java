@@ -13,16 +13,14 @@ public class Game {
     private final Gardener gardener;
     private boolean switchLevelRequested = false;
     private int switchLevel;
-    private Position nestPosition;
     private Timer timer;
     private Timer timerBis;
     private Timer hornetTimer;
 
-    public Game(World world, Configuration configuration, Position gardenerPosition, Position nestPosition) {
+    public Game(World world, Configuration configuration, Position gardenerPosition) {
         this.configuration = configuration;
         this.world = world;
         gardener = new Gardener(this, gardenerPosition);
-        this.nestPosition = nestPosition;
         this.timer = new Timer(1);
         this.timerBis = new Timer(1);
         this.hornetTimer = new Timer(10);
@@ -45,10 +43,6 @@ public class Game {
 
     public Gardener getGardener() {
         return this.gardener;
-    }
-
-    public Position getNestPosition() {
-        return this.nestPosition;
     }
 
 

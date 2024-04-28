@@ -8,6 +8,8 @@
     import fr.ubx.poo.ugarden.game.Game;
     import fr.ubx.poo.ugarden.game.Position;
     import fr.ubx.poo.ugarden.go.GameObject;
+    import fr.ubx.poo.ugarden.go.bonus.Key;
+    import fr.ubx.poo.ugarden.go.bonus.Nest;
     import fr.ubx.poo.ugarden.go.decor.Decor;
     import fr.ubx.poo.ugarden.go.decor.ground.Carrots;
     import fr.ubx.poo.ugarden.go.personage.Gardener;
@@ -90,8 +92,14 @@
 
             sprites.add(new SpriteGardener(layer, gardener));
 
-
-            sprites.add(new SpriteHornet(layer, new Hornet(game, game.getNestPosition(), Direction.UP)));
+            for (int i = 0; i < game.world().getGrid().width(); i++) {
+                for (int j = 0; j < game.world().getGrid().height(); j++) {
+                    Position pos = new Position(1, i, j);
+                    if (game.world().getGrid().get(pos).getBonus() != null && game.world().getGrid().get(pos).getBonus().getClass().equals(Nest.class)) {
+                        sprites.add(new SpriteHornet(layer, new Hornet(game, pos, Direction.UP)));
+                    }
+                }
+            }
 
             game.getHornetTimer().stop();
             game.getHornetTimer().start();
@@ -204,17 +212,18 @@
             }
 
 
-
-
-
             game.getHornetTimer().update(now);
 
 
-
-
-
             if (this.game.getHornetTimer().getRemaining() <= 0) {
-                sprites.add(new SpriteHornet(layer, new Hornet(game, game.getNestPosition(), Direction.UP)));
+                for (int i = 0; i < game.world().getGrid().width(); i++) {
+                    for (int j = 0; j < game.world().getGrid().height(); j++) {
+                        Position pos = new Position(1, i, j);
+                        if (game.world().getGrid().get(pos).getBonus() != null && game.world().getGrid().get(pos).getBonus().getClass().equals(Nest.class)) {
+                            sprites.add(new SpriteHornet(layer, new Hornet(game, pos, Direction.UP)));
+                        }
+                    }
+                }
                 game.getHornetTimer().stop();
                 game.getHornetTimer().start();
             }
@@ -223,34 +232,34 @@
             game.getTimerBis().update(now);
 
 
+            if (game.getTimerBis().getRemaining() < 0) {
+                int moveFreq = game.configuration().hornetMoveFrequency();
 
+                while (moveFreq > 0) {
+                    for (int i = 0; i < sprites.size(); i++) {
+                        if (sprites.get(i).getClass().equals(SpriteHornet.class)) {
+                            Position hornetPosition = sprites.get(i).getPosition();
 
-            if (game.getTimerBis().getRemaining() <= 0) {
-                for (int i = 0; i < sprites.size(); i++) {
-                    if (sprites.get(i).getClass().equals(SpriteHornet.class)) {
-                        Position hornetPosition = sprites.get(i).getPosition();
+                            Direction direction;
+                            Hornet hornet;
+                            do {
+                                direction = Direction.random();
+                                hornet = new Hornet(game, hornetPosition, direction);
+                            } while (!hornet.canMove(direction));
 
-                        Direction direction;
-                        Hornet hornet;
-                        do {
-                            direction = Direction.random();
-                            hornet = new Hornet(game, hornetPosition, direction);
-                        } while (!hornet.canMove(direction));
+                            hornet = new Hornet(game, direction.nextPosition(hornetPosition), direction);
 
-                        hornet = new Hornet(game, direction.nextPosition(hornetPosition), direction);
+                            sprites.get(i).remove();
+                            sprites.set(i, new SpriteHornet(layer, hornet));
+                        }
 
-                        sprites.get(i).remove();
-                        sprites.set(i, new SpriteHornet(layer, hornet));
                     }
-
+                    moveFreq--;
                 }
+
                 game.getTimerBis().stop();
                 game.getTimerBis().start();
             }
-
-
-
-
         }
 
         public void cleanupSprites() {

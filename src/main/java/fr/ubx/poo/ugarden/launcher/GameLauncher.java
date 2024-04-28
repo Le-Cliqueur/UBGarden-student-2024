@@ -55,38 +55,96 @@ public class GameLauncher {
 
             String levelEntityCode = properties.getProperty("level1");
 
+            String comp = properties.getProperty("compression");
+
+            System.out.println(comp.equals("false"));
+
             int width = 0;
             int height = 0;
 
-            for (int j = 0; j < levelEntityCode.length()-1; j++) {
-                if (levelEntityCode.charAt(j) != 'x') {
-                    height++;
-                } else {
-                    width++;
-                    height = 0;
+            MapLevel mapLevel = new MapLevel(width, height);
+
+            if (comp.equals("false")) {
+                for (int j = 0; j < levelEntityCode.length()-1; j++) {
+                    if (levelEntityCode.charAt(j) != 'x') {
+                        height++;
+                    } else {
+                        width++;
+                        height = 0;
+                    }
+                }
+
+                mapLevel = new MapLevel(width+1, height);
+                System.out.println(width + "   " + height);
+
+                int onTheLine = 0;
+                int onTheCol = 0;
+
+                for (int j = 0; j < levelEntityCode.length(); j++) {
+                    if (levelEntityCode.charAt(j) != 'x') {
+                        mapLevel.set(onTheLine, onTheCol, MapEntity.fromCode(levelEntityCode.charAt(j)));
+                        onTheCol++;
+
+                    } else {
+                        onTheLine++;
+                        onTheCol = 0;
+                    }
+                }
+            } else {
+                System.out.println("jpp");
+
+                for (int j = 0; j < levelEntityCode.length()-1; j++) {
+                    if (levelEntityCode.charAt(j) != 'x') {
+                        if (Character.isDigit(levelEntityCode.charAt(j))) {
+                            height--;
+                            height += (((int) (levelEntityCode.charAt(j))) - 48);
+                            System.out.println((int) (levelEntityCode.charAt(j)) - 48);
+                        } else {
+                            height++;
+                        }
+                    } else {
+                        width++;
+                        height = 0;
+                    }
+                }
+
+                mapLevel = new MapLevel(width+1, height);
+                System.out.println(mapLevel.width() + "   " + mapLevel.height());
+
+                int onTheLine = 0;
+                int onTheCol = 0;
+
+                for (int j = 0; j < levelEntityCode.length(); j++) {
+                    System.out.println(mapLevel + "char :" +levelEntityCode.charAt(j));
+                    for (int i = 0; i < mapLevel.width(); i++) {
+                        for (int k = 0; k < mapLevel.height(); k++) {
+                            System.out.println(mapLevel.get(i,k));
+                        }
+                    }
+                    if (levelEntityCode.charAt(j) != 'x') {
+                        if (Character.isDigit(levelEntityCode.charAt(j))) {
+                            for (int k = 0; k < (((int) levelEntityCode.charAt(j)) - 48); k++) {
+                                mapLevel.set(onTheLine, onTheCol--, MapEntity.fromCode(levelEntityCode.charAt(j-1)));
+                                onTheCol++;
+                            }
+                        } else {
+                            mapLevel.set(onTheLine, onTheCol, MapEntity.fromCode(levelEntityCode.charAt(j)));
+                            onTheCol++;
+                        }
+                    } else {
+                        onTheLine++;
+                        onTheCol = 0;
+                    }
                 }
             }
 
-            MapLevel mapLevel = new MapLevel(width+1, height);
-            System.out.println(width + "   " + height);
 
-            int onTheLine = 0;
-            int onTheCol = 0;
 
-            for (int j = 0; j < levelEntityCode.length(); j++) {
-                if (levelEntityCode.charAt(j) != 'x') {
-                    mapLevel.set(onTheLine, onTheCol, MapEntity.fromCode(levelEntityCode.charAt(j)));
-                    onTheCol++;
 
-                } else {
-                    onTheLine++;
-                    onTheCol = 0;
-                }
-            }
+
 
             System.out.println("11");
             Position gardenerPosition = mapLevel.getGardenerPosition();
-            Position nestPosition = mapLevel.getNestPosition();
             System.out.println("22");
             if (gardenerPosition == null)
                 throw new RuntimeException("Gardener not found");
@@ -95,7 +153,7 @@ public class GameLauncher {
             System.out.println("44");
             World world = new World(Integer.parseInt(properties.getProperty("levels")));
             System.out.println("55");
-            Game game = new Game(world, configuration, gardenerPosition, nestPosition);
+            Game game = new Game(world, configuration, gardenerPosition);
             System.out.println("66");
             Map level = new Level(game, 1, mapLevel);
             System.out.println("77");
@@ -116,7 +174,6 @@ public class GameLauncher {
         MapLevel mapLevel = new MapLevelDefault();
         System.out.println("1");
         Position gardenerPosition = mapLevel.getGardenerPosition();
-        Position nestPosition = mapLevel.getNestPosition();
         System.out.println("2");
         if (gardenerPosition == null)
             throw new RuntimeException("Gardener not found");
@@ -125,7 +182,7 @@ public class GameLauncher {
         System.out.println("4");
         World world = new World(1);
         System.out.println("5");
-        Game game = new Game(world, configuration, gardenerPosition, nestPosition);
+        Game game = new Game(world, configuration, gardenerPosition);
         System.out.println("6");
         Map level = new Level(game, 1, mapLevel);
         System.out.println("7");
