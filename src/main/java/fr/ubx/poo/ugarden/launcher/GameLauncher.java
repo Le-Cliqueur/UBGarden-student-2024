@@ -57,8 +57,6 @@ public class GameLauncher {
 
             String comp = properties.getProperty("compression");
 
-            System.out.println(comp.equals("false"));
-
             int width = 0;
             int height = 0;
 
@@ -74,8 +72,7 @@ public class GameLauncher {
                     }
                 }
 
-                mapLevel = new MapLevel(width+1, height);
-                System.out.println(width + "   " + height);
+                mapLevel = new MapLevel(height, width+1);
 
                 int onTheLine = 0;
                 int onTheCol = 0;
@@ -83,22 +80,20 @@ public class GameLauncher {
                 for (int j = 0; j < levelEntityCode.length(); j++) {
                     if (levelEntityCode.charAt(j) != 'x') {
                         mapLevel.set(onTheLine, onTheCol, MapEntity.fromCode(levelEntityCode.charAt(j)));
-                        onTheCol++;
+                        onTheLine++;
 
                     } else {
-                        onTheLine++;
-                        onTheCol = 0;
+                        onTheCol++;
+                        onTheLine = 0;
                     }
                 }
             } else {
-                System.out.println("jpp");
 
                 for (int j = 0; j < levelEntityCode.length()-1; j++) {
                     if (levelEntityCode.charAt(j) != 'x') {
                         if (Character.isDigit(levelEntityCode.charAt(j))) {
                             height--;
                             height += (((int) (levelEntityCode.charAt(j))) - 48);
-                            System.out.println((int) (levelEntityCode.charAt(j)) - 48);
                         } else {
                             height++;
                         }
@@ -108,8 +103,7 @@ public class GameLauncher {
                     }
                 }
 
-                mapLevel = new MapLevel(width+1, height);
-                System.out.println(mapLevel.width() + "   " + mapLevel.height());
+                mapLevel = new MapLevel(height, width+1);
 
                 int onTheLine = 0;
                 int onTheCol = 0;
@@ -119,47 +113,31 @@ public class GameLauncher {
                         if (Character.isDigit(levelEntityCode.charAt(i))) {
                             int val = (int) levelEntityCode.charAt(i) - 48;
                             for (int j = 0; j < val; j++) {
-                                mapLevel.set(onTheLine, onTheCol-1+j, MapEntity.fromCode(levelEntityCode.charAt(i-1)));
+                                mapLevel.set(onTheLine-1+j, onTheCol, MapEntity.fromCode(levelEntityCode.charAt(i-1)));
                             }
-                            onTheCol += val - 1;
+                            onTheLine += val - 1;
                         } else {
                             mapLevel.set(onTheLine, onTheCol, MapEntity.fromCode(levelEntityCode.charAt(i)));
-                            onTheCol++;
+                            onTheLine++;
                         }
 
                     } else {
-                        onTheLine++;
-                        onTheCol = 0;
+                        onTheCol++;
+                        onTheLine = 0;
                     }
-
                 }
-
             }
 
-
-
-
-
-            System.out.println("11");
             Position gardenerPosition = mapLevel.getGardenerPosition();
-            System.out.println("22");
             if (gardenerPosition == null)
                 throw new RuntimeException("Gardener not found");
-            System.out.println("33");
             Configuration configuration = getConfiguration(properties);
-            System.out.println("44");
             World world = new World(Integer.parseInt(properties.getProperty("levels")));
-            System.out.println("55");
             Game game = new Game(world, configuration, gardenerPosition);
-            System.out.println("66");
             Map level = new Level(game, 1, mapLevel);
-            System.out.println("77");
             world.put(1, level);
-            System.out.println("88");
             return game;
 
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -169,22 +147,14 @@ public class GameLauncher {
     public Game load() {
         Properties emptyConfig = new Properties();
         MapLevel mapLevel = new MapLevelDefault();
-        System.out.println("1");
         Position gardenerPosition = mapLevel.getGardenerPosition();
-        System.out.println("2");
         if (gardenerPosition == null)
             throw new RuntimeException("Gardener not found");
-        System.out.println("3");
         Configuration configuration = getConfiguration(emptyConfig);
-        System.out.println("4");
         World world = new World(1);
-        System.out.println("5");
         Game game = new Game(world, configuration, gardenerPosition);
-        System.out.println("6");
         Map level = new Level(game, 1, mapLevel);
-        System.out.println("7");
         world.put(1, level);
-        System.out.println("8");
         return game;
     }
 

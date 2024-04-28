@@ -12,7 +12,6 @@ public class MapLevel {
 
 
     private Position gardenerPosition = null;
-    private Position nestPosition = null;
 
     public MapLevel(int width, int height) {
         this.width = width;
@@ -47,15 +46,6 @@ public class MapLevel {
                     gardenerPosition = new Position(1, i, j);
                 }
         return gardenerPosition;
-    }
-
-    public Position getNestPosition() {
-        for (int i = 0; i < width; i++)
-            for (int j = 0; j < height; j++)
-                if (grid[j][i] == Nest) {
-                    nestPosition = new Position(1, i, j);
-                }
-        return nestPosition;
     }
 
 }

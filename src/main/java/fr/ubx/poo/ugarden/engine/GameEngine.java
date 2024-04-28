@@ -196,7 +196,7 @@
             gardener.update(now);
 
             this.game.getTimer().update(now);
-            if (this.game.getTimer().getRemaining() <= 0 && gardener.getEnergy() < 100) {
+            if (this.game.getTimer().getRemaining() <= 0 && gardener.getEnergy() < game.configuration().gardenerEnergy()) {
                 gardener.hurt(-1);
                 this.game.getTimer().stop();
                 this.game.getTimer().start();
@@ -259,6 +259,7 @@
 
                 game.getTimerBis().stop();
                 game.getTimerBis().start();
+
             }
         }
 

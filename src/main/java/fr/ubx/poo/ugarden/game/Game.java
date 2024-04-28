@@ -21,7 +21,7 @@ public class Game {
         this.configuration = configuration;
         this.world = world;
         gardener = new Gardener(this, gardenerPosition);
-        this.timer = new Timer(1);
+        this.timer = new Timer(configuration.energyRecoverDuration());
         this.timerBis = new Timer(1);
         this.hornetTimer = new Timer(10);
     }

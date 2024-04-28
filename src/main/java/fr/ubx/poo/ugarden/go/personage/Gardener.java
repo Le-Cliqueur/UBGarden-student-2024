@@ -12,7 +12,9 @@ import fr.ubx.poo.ugarden.go.GameObject;
 import fr.ubx.poo.ugarden.go.Movable;
 import fr.ubx.poo.ugarden.go.TakeVisitor;
 import fr.ubx.poo.ugarden.go.WalkVisitor;
+import fr.ubx.poo.ugarden.go.bonus.Apple;
 import fr.ubx.poo.ugarden.go.bonus.Key;
+import fr.ubx.poo.ugarden.go.bonus.PoisonedApple;
 import fr.ubx.poo.ugarden.go.decor.Decor;
 import fr.ubx.poo.ugarden.go.decor.Flowers;
 import fr.ubx.poo.ugarden.go.decor.ground.Grass;
@@ -45,12 +47,30 @@ public class Gardener extends GameObject implements Movable, TakeVisitor, WalkVi
 
     }
 
+    public void take(Apple apple) {
+// TODO
+        apple.remove();
+        this.hurt(-(game.configuration().energyBoost()));
+        if (getEnergy() >= game.configuration().gardenerEnergy()) {
+            this.hurt(getEnergy() - game.configuration().gardenerEnergy());
+        }
+    }
+
+    public void take(PoisonedApple poisonedApple) {
+// TODO
+        poisonedApple.remove();
+    }
+
     public int getNbKey() {
         return this.nbKey;
     }
 
     public int getNbDisease() {
         return this.diseaseLevel;
+    }
+
+    public void setNbDisease(int diseaseLevel) {
+        this.diseaseLevel = diseaseLevel;
     }
 
 
