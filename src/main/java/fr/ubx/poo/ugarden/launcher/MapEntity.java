@@ -10,6 +10,7 @@ public enum MapEntity {
     Tree('T'),
 
     Gardener('P'),
+    Hornet('R'),
     Hedgehog('H'),
     Key('K'),
 

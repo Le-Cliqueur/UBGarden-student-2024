@@ -17,6 +17,10 @@ public class Timer {
         remaining = duration;
     }
 
+    public long getRemaining() {
+        return this.remaining;
+    }
+
     // Function to call as often as possible to update the timer (see update in GameEngine)
     public void update(long now) {
         // time is in ns
@@ -39,6 +43,12 @@ public class Timer {
             requested = true;
         else
             remaining = duration;
+    }
+
+    public void stop() {
+        this.running = false;
+        this.requested = false;
+        this.remaining = 0;
     }
 
     // Check if the timer is still running

@@ -6,15 +6,24 @@
 
     import fr.ubx.poo.ugarden.game.Direction;
     import fr.ubx.poo.ugarden.game.Game;
+    import fr.ubx.poo.ugarden.game.Position;
+    import fr.ubx.poo.ugarden.go.GameObject;
+    import fr.ubx.poo.ugarden.go.bonus.Key;
+    import fr.ubx.poo.ugarden.go.bonus.Nest;
+    import fr.ubx.poo.ugarden.go.decor.Decor;
+    import fr.ubx.poo.ugarden.go.decor.DoorNextClosed;
+    import fr.ubx.poo.ugarden.go.decor.DoorNextOpened;
+    import fr.ubx.poo.ugarden.go.decor.ground.Carrots;
     import fr.ubx.poo.ugarden.go.personage.Gardener;
-    import fr.ubx.poo.ugarden.view.ImageResource;
-    import fr.ubx.poo.ugarden.view.Sprite;
-    import fr.ubx.poo.ugarden.view.SpriteFactory;
-    import fr.ubx.poo.ugarden.view.SpriteGardener;
+    import fr.ubx.poo.ugarden.go.personage.Hedgehog;
+    import fr.ubx.poo.ugarden.go.personage.Hornet;
+    import fr.ubx.poo.ugarden.launcher.MapEntity;
+    import fr.ubx.poo.ugarden.view.*;
     import javafx.animation.AnimationTimer;
     import javafx.application.Platform;
     import javafx.scene.Group;
     import javafx.scene.Scene;
+    import javafx.scene.image.Image;
     import javafx.scene.layout.Pane;
     import javafx.scene.layout.StackPane;
     import javafx.scene.paint.Color;
@@ -23,7 +32,11 @@
     import javafx.scene.text.TextAlignment;
     import javafx.stage.Stage;
 
+    import fr.ubx.poo.ugarden.view.ImageResource.*;
+
+    import java.awt.*;
     import java.util.*;
+    import java.util.List;
 
 
     public final class GameEngine {
@@ -80,6 +93,21 @@
             }
 
             sprites.add(new SpriteGardener(layer, gardener));
+
+            for (int i = 0; i < game.world().getGrid().width(); i++) {
+                for (int j = 0; j < game.world().getGrid().height(); j++) {
+                    Position pos = new Position(1, i, j);
+                    if (game.world().getGrid().get(pos).getBonus() != null && game.world().getGrid().get(pos).getBonus().getClass().equals(Nest.class)) {
+                        sprites.add(new SpriteHornet(layer, new Hornet(game, pos, Direction.UP)));
+                    }
+                }
+            }
+
+            game.getHornetTimer().stop();
+            game.getHornetTimer().start();
+
+            game.getTimerBis().stop();
+            game.getTimerBis().start();
         }
 
         void buildAndSetGameLoop() {
@@ -117,6 +145,16 @@
 
         private void checkCollision() {
             // Check a collision between a hornet and the gardener
+            for (int i = 0; i < sprites.size(); i++) {
+                if (sprites.get(i).getClass().equals(SpriteHornet.class) && sprites.get(i).getGameObject().getPosition().equals(gardener.getPosition())) {
+
+                    sprites.get(i).remove();
+                    sprites.remove(i);
+
+                    gardener.hurt();
+                }
+
+            }
         }
 
         private void processInput() {
@@ -159,9 +197,79 @@
 
             gardener.update(now);
 
-            if (gardener.getEnergy() < 0) {
+            this.game.getTimer().update(now);
+            if (this.game.getTimer().getRemaining() <= 0 && gardener.getEnergy() < game.configuration().gardenerEnergy()) {
+                gardener.hurt(-1);
+                this.game.getTimer().stop();
+                this.game.getTimer().start();
+            }
+
+            if (gardener.getEnergy() <= 0) {
                 gameLoop.stop();
                 showMessage("Perdu!", Color.RED);
+            }
+            if (gardener.game.world().getGrid().get(gardener.getPosition()).getClass().equals(Hedgehog.class)) {
+                gameLoop.stop();
+                showMessage("Victoire!", Color.GREEN);
+            }
+
+
+            game.getHornetTimer().update(now);
+
+
+            if (this.game.getHornetTimer().getRemaining() <= 0) {
+                for (int i = 0; i < game.world().getGrid().width(); i++) {
+                    for (int j = 0; j < game.world().getGrid().height(); j++) {
+                        Position pos = new Position(1, i, j);
+                        if (game.world().getGrid().get(pos).getBonus() != null && game.world().getGrid().get(pos).getBonus().getClass().equals(Nest.class)) {
+                            sprites.add(new SpriteHornet(layer, new Hornet(game, pos, Direction.UP)));
+                        }
+                    }
+                }
+                game.getHornetTimer().stop();
+                game.getHornetTimer().start();
+            }
+
+
+            game.getTimerBis().update(now);
+
+
+            if (game.getTimerBis().getRemaining() < 0) {
+                int moveFreq = game.configuration().hornetMoveFrequency();
+
+                while (moveFreq > 0) {
+                    for (int i = 0; i < sprites.size(); i++) {
+                        if (sprites.get(i).getClass().equals(SpriteHornet.class)) {
+                            Position hornetPosition = sprites.get(i).getPosition();
+
+                            Direction direction;
+                            Hornet hornet;
+                            do {
+                                direction = Direction.random();
+                                hornet = new Hornet(game, hornetPosition, direction);
+                            } while (!hornet.canMove(direction));
+
+                            hornet = new Hornet(game, direction.nextPosition(hornetPosition), direction);
+
+                            sprites.get(i).remove();
+                            sprites.set(i, new SpriteHornet(layer, hornet));
+                        }
+
+                    }
+                    moveFreq--;
+                }
+
+                game.getTimerBis().stop();
+                game.getTimerBis().start();
+            }
+
+            if (game.isDoorOpen()) {
+                for (int i = 0; i < sprites.size(); i++) {
+                    if (sprites.get(i).getGameObject().getClass().equals(DoorNextClosed.class)) {
+                        Position pos = sprites.get(i).getGameObject().getPosition();
+                        sprites.set(i, SpriteFactory.create(layer, new DoorNextOpened(pos)));
+                    }
+                }
             }
         }
 
